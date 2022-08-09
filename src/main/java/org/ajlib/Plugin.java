@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Plugin {
     String name();
-    void initialize(String config);
+    default void initialize(String config) {}
     @Nonnull
     List<NamedClassTransformer> transformers();
 }

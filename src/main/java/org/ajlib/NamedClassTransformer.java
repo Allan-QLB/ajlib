@@ -1,10 +1,8 @@
 package org.ajlib;
 
-import javax.annotation.Nonnull;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public interface NamedClassTransformer extends ClassFileTransformer {
@@ -32,6 +30,7 @@ public interface NamedClassTransformer extends ClassFileTransformer {
                      ProtectionDomain protectionDomain,
                      byte[] classfileBuffer) throws IllegalClassFormatException {
         if (shouldTransform(className)) {
+            System.out.println("transform class " + className);
             return doTransform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
         }
         return classfileBuffer;

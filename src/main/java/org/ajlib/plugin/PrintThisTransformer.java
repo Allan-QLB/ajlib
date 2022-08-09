@@ -1,9 +1,6 @@
 package org.ajlib.plugin;
 
 import org.ajlib.NamedClassTransformer;
-import org.ajlib.log.LogHelper;
-import org.ajlib.rule.DnsFilter;
-import org.ajlib.util.ConfigUtil;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -11,25 +8,21 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.logging.Logger;
 
-public class DnsResolveTransformer implements NamedClassTransformer {
-
-    private static final Logger LOG = LogHelper.getLogger();
-
+public class PrintThisTransformer implements NamedClassTransformer {
     @Override
     public void initialize(String config) {
-        DnsFilter.initialize(ConfigUtil.parseRules(config));
+
     }
 
     @Override
     public String targetPattern() {
-        return "java/net/InetAddress";
+        return "java/util/HashMap";
     }
 
     @Override
     public String name() {
-        return "dns";
+        return "printThis";
     }
 
     @Override
@@ -38,15 +31,14 @@ public class DnsResolveTransformer implements NamedClassTransformer {
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
         for (MethodNode method : classNode.methods) {
-            if (method.name.equals("getByName")
-                    && method.desc.equals("(Ljava/lang/String;)Ljava/net/InetAddress;")) {
-                LOG.info("target found");
-                //System.out.println("target found");
+            if (method.name.equals("put")
+                    && method.desc.equals("(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;")) {
+                System.out.println("target found");
                 InsnList insnList = new InsnList();
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-                        "org/ajlib/rule/DnsFilter", "filter",
-                        "(Ljava/lang/String;)V", false));
+                        "org/ajlib/rule/PrintFilter", "print",
+                        "(Ljava/lang/Object;)V", false));
                 method.instructions.insert(insnList);
             }
         }

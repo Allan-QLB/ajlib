@@ -10,14 +10,13 @@ public class DnsFilter {
         DnsFilter.rules = rules;
     }
 
-    public void filter(String host) throws UnknownHostException {
+    public static void filter(String host) throws UnknownHostException {
         for (Rule rule : rules) {
             if (rule.test(host)) {
+                System.out.println("host " + host + "matched");
                 throw new UnknownHostException();
             }
         }
     }
-
-
 
 }

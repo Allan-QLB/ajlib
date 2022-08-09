@@ -24,7 +24,8 @@ class ConfigUtilTest {
     void testParseRules() throws IOException {
         Map<String, Object> config = ConfigUtil.loadConfigAsMap(CFG_FILE);
         List<Rule> rules = ConfigUtil.parseRules(YamlUtil.dump("a", config));
-        System.out.println(rules);
+        assertNotNull(rules);
+        assertFalse(rules.isEmpty());
     }
 
 

@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class Rule {
-    private static final String KEY_MATCH = "matching";
-    private static final String KEY_RULE = "rule";
+    public static final String KEY_MATCH = "matching";
+    public static final String KEY_RULE = "rule";
 
     @Nonnull
     private final Matching matching;
