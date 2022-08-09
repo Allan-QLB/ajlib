@@ -1,29 +1,22 @@
 package org.ajlib;
 
-import org.ajlib.matching.ClassNameMatching;
-
 import javax.annotation.Nonnull;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public interface NamedClassTransformer extends ClassFileTransformer {
 
     void initialize(String config);
 
-    @Nonnull
-    List<ClassNameMatching> matches();
+    String targetPattern();
 
     String name();
 
     default boolean shouldTransform(String className) {
-        for (ClassNameMatching matching : matches()) {
-            if (matching.matches(className)) {
-                return true;
-            }
-        }
-        return false;
+       return Pattern.matches(targetPattern(), className);
     }
 
     byte[] doTransform(ClassLoader loader,

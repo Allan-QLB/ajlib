@@ -1,2 +1,4 @@
 a:
-  b: aa
+  - {matching: eq, rule: {aaa: bbb}}
+  - {matching: eq, rule: {aaa: bbb}}
+  - {matching: eq, rule: {aaa: 'bb,ccc'}}
