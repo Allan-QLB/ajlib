@@ -1,6 +1,6 @@
 package org.ajlib.log;
 
-import java.io.PrintStream;
+import javax.annotation.Nonnull;
 
 import static org.ajlib.log.Logger.Level.*;
 
@@ -8,10 +8,13 @@ public class LoggerImpl implements Logger {
 
     private final String name;
 
+    private final LogHandler handler;
+
     private boolean debugEnable;
 
-    public LoggerImpl(String name) {
+    public LoggerImpl(@Nonnull String name, @Nonnull LogHandler handler) {
         this.name = name;
+        this.handler = handler;
     }
 
     @Override
@@ -42,13 +45,7 @@ public class LoggerImpl implements Logger {
     }
 
     private void write(Level level, String message, Object... args) {
-        write(new LogRecord(level, name, message, args), level == ERROR ? System.err : System.out);
-    }
-
-    private void write(LogRecord log, PrintStream target) {
-        if (log != null) {
-           target.println(log.textify());
-        }
+        handler.handleLog(new LogRecord(level, name, message, args));
     }
 
 }

@@ -46,4 +46,11 @@ public class LogRecord {
          return String.format(HEAD, time, level, logName);
     }
 
+    public Logger.Level getLevel() {
+        return level;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
 }

@@ -27,10 +27,10 @@ public class ConfigUtil {
     }
 
     @SuppressWarnings("unchecked")
-    static Map<String, Object> loadConfigAsMap(String fileName) throws IOException {
+    public static Map<String, Object> loadConfigAsMap(String fileName) throws IOException {
         final InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream(fileName);
         if (configStream == null) {
-            throw new ConfigurationException("Config file " + CONFIG_FILE + " not found in classpath");
+            throw new ConfigurationException("Config file " + fileName + " not found in classpath");
         }
         final Yaml yaml = new Yaml();
         try (InputStream inputStream = configStream) {

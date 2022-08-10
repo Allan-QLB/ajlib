@@ -15,6 +15,9 @@ import java.util.jar.JarFile;
 
 @Slf4j
 public class Agent {
+
+    public static final String HOME = "agent.home";
+
     public static void premain(String args, Instrumentation inst) {
 
         try {
@@ -38,6 +41,8 @@ public class Agent {
     @SneakyThrows
     private static void loadPlugins(Instrumentation inst, Map<String, Object> config) {
         final String agentJarLocation = Agent.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        System.setProperty(Agent.HOME, agentJarLocation);
+        //Env.init(agentJarLocation);
         final File agentFile = new File(agentJarLocation);
         inst.appendToBootstrapClassLoaderSearch(new JarFile(agentFile));
         final CompositeTransformer compositeTransformer = new CompositeTransformer(inst);

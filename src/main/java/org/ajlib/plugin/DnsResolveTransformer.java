@@ -50,6 +50,7 @@ public class DnsResolveTransformer implements NamedClassTransformer {
             }
         }
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        LOG.info("xxxxxx {}", classNode);
         classNode.accept(classWriter);
         return classWriter.toByteArray();
     }
