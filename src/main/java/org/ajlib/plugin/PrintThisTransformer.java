@@ -17,7 +17,7 @@ public class PrintThisTransformer implements NamedClassTransformer {
 
     @Override
     public String targetPattern() {
-        return "java/util/HashMap";
+        return "com/google/gson/LinkedTreeMap";
     }
 
     @Override
@@ -33,7 +33,6 @@ public class PrintThisTransformer implements NamedClassTransformer {
         for (MethodNode method : classNode.methods) {
             if (method.name.equals("put")
                     && method.desc.equals("(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;")) {
-                System.out.println("target found");
                 InsnList insnList = new InsnList();
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
