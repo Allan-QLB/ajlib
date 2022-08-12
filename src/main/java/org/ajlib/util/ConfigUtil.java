@@ -2,8 +2,6 @@ package org.ajlib.util;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReflectUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.ajlib.Agent;
 import org.ajlib.exception.ConfigurationException;
 import org.ajlib.exception.RuleException;
 import org.ajlib.rule.Rule;
@@ -18,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 public class ConfigUtil {
     private static final String CONFIG_FILE = "config.yaml";
 
@@ -36,7 +33,6 @@ public class ConfigUtil {
         try (InputStream inputStream = configStream) {
             final Map<String, Object> configMap = yaml.loadAs(inputStream, Map.class);
             if (CollectionUtil.isEmpty(configMap)) {
-                log.warn("Config is empty");
                 return Collections.emptyMap();
             } else {
                 return configMap;

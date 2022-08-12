@@ -1,6 +1,9 @@
 package org.ajlib.log;
 
+import cn.hutool.core.lang.ansi.AnsiEncoder;
 import org.ajlib.util.Env;
+import org.slf4j.helpers.FormattingTuple;
+import org.slf4j.helpers.MessageFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,10 +41,21 @@ public class FileHandler implements LogHandler {
     @Override
     public void handleLog(LogRecord log) {
         try {
-            getOutput(log).println(log.textify());
-        } catch (IOException e) {
+            getOutput(log).println(textify(log));
+        } catch (IOException | Error e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String textify(LogRecord logRecord) {
+        final String template = AnsiEncoder.encode( "[%s]","[%-5s]%s","%-30s: ","%s%n");
+        final FormattingTuple formattedMsg = MessageFormatter.arrayFormat(logRecord.getMessage(), logRecord.getArguments());
+        return String.format(template, logRecord.getTime(),
+                logRecord.getLevel(),
+                " ",
+                logRecord.getLogName(),
+                formattedMsg.getMessage() + textifyThrowable(formattedMsg.getThrowable()));
     }
 
     PrintStream getOutput(LogRecord log) throws IOException {

@@ -2,7 +2,6 @@ package org.ajlib;
 
 import cn.hutool.core.util.ClassUtil;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.ajlib.util.ConfigUtil;
 import org.ajlib.util.YamlUtil;
 
@@ -13,7 +12,6 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.jar.JarFile;
 
-@Slf4j
 public class Agent {
 
     public static final String HOME = "agent.home";
@@ -25,7 +23,7 @@ public class Agent {
             loadPlugins(inst, config);
             loadClassPathPlugins(inst, config);
         } catch (Exception e) {
-            log.error("Error run agent", e);
+            System.err.println("Error run agent");
         }
     }
 
@@ -42,7 +40,6 @@ public class Agent {
     private static void loadPlugins(Instrumentation inst, Map<String, Object> config) {
         final String agentJarLocation = Agent.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         System.setProperty(Agent.HOME, agentJarLocation);
-        //Env.init(agentJarLocation);
         final File agentFile = new File(agentJarLocation);
         inst.appendToBootstrapClassLoaderSearch(new JarFile(agentFile));
         final CompositeTransformer compositeTransformer = new CompositeTransformer(inst);
@@ -56,6 +53,7 @@ public class Agent {
             }
         }
         inst.addTransformer(compositeTransformer, true);
+        inst.setNativeMethodPrefix(compositeTransformer, "ajcompose");
         for (Class<?> loadedClass : inst.getAllLoadedClasses()) {
             if (inst.isModifiableClass(loadedClass) && compositeTransformer.canTransform(loadedClass)) {
                 inst.retransformClasses(loadedClass);

@@ -40,7 +40,6 @@ public class DnsResolveTransformer implements NamedClassTransformer {
         for (MethodNode method : classNode.methods) {
             if (method.name.equals("getByName")
                     && method.desc.equals("(Ljava/lang/String;)Ljava/net/InetAddress;")) {
-                LOG.error("target found {} {}", loader, className, new RuntimeException());
                 InsnList insnList = new InsnList();
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
@@ -50,7 +49,6 @@ public class DnsResolveTransformer implements NamedClassTransformer {
             }
         }
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-        LOG.info("xxxxxx {}", classNode);
         classNode.accept(classWriter);
         return classWriter.toByteArray();
     }

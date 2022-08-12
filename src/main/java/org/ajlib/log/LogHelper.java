@@ -4,22 +4,20 @@ package org.ajlib.log;
 import org.ajlib.util.ConfigUtil;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class LogHelper {
     private static final Map<String, Logger> CACHED = new HashMap<>();
     private static final String LOG_CFG_FILE = "config-log.yaml";
-    private static LogHandler logHandler;
+    private static List<LogHandler> logHandlers = null;
 
     static {
         initHandler();
     }
 
     public static void initHandler() {
+        List<LogHandler> handlers = new ArrayList<>();
         try {
             LogHandler handler = null;
             final Map<String, Object> config = ConfigUtil.loadConfigAsMap(LOG_CFG_FILE);
@@ -29,21 +27,21 @@ public class LogHelper {
                             .orElse(Collections.emptyMap()));
                 }
                 if (handler != null) {
-                    logHandler = handler;
-                    return;
+                    handlers.add(handler);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (logHandler == null) {
-                logHandler = new ConsoleHandler();
+            if (handlers.isEmpty()) {
+                handlers.add(new ConsoleHandler());
             }
+            logHandlers = Collections.unmodifiableList(handlers);
         }
     }
 
     public static Logger getLogger(@Nonnull String name) {
-        return CACHED.computeIfAbsent(name, k -> new LoggerImpl(k, logHandler));
+        return CACHED.computeIfAbsent(name, k -> new LoggerImpl(k, logHandlers));
     }
 
     public static Logger getLogger(@Nonnull Class<?> clazz) {
