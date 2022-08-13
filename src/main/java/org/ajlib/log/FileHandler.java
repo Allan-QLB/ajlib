@@ -1,10 +1,10 @@
 package org.ajlib.log;
 
-import cn.hutool.core.lang.ansi.AnsiEncoder;
 import org.ajlib.util.Env;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -22,6 +22,7 @@ public class FileHandler implements LogHandler {
     private static final String DEFAULT_LOG_NAME = "agent.log";
     private static final String KEY_MAX_FILES = "max-file";
     private static final int DEFAULT_MAX_FILES = 1;
+    private static final String LOG_FORMAT = "[%s][%-5s]%s%-30s: %s%n";
     private final String logDir;
     private final String name;
     private final File logFile;
@@ -39,26 +40,26 @@ public class FileHandler implements LogHandler {
 
 
     @Override
-    public void handleLog(LogRecord log) {
+    public void handleLog(@Nonnull LogRecord log) {
         try {
-            getOutput(log).println(textify(log));
+            getOutput(log).println(buildLogText(log));
         } catch (IOException | Error e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public String textify(LogRecord logRecord) {
-        final String template = AnsiEncoder.encode( "[%s]","[%-5s]%s","%-30s: ","%s%n");
+    public String buildLogText(@Nonnull LogRecord logRecord) {
         final FormattingTuple formattedMsg = MessageFormatter.arrayFormat(logRecord.getMessage(), logRecord.getArguments());
-        return String.format(template, logRecord.getTime(),
+        return String.format(LOG_FORMAT, logRecord.getTime(),
                 logRecord.getLevel(),
                 " ",
                 logRecord.getLogName(),
                 formattedMsg.getMessage() + textifyThrowable(formattedMsg.getThrowable()));
     }
 
-    PrintStream getOutput(LogRecord log) throws IOException {
+    @Override
+    public PrintStream getOutput(LogRecord log) throws IOException {
         final LocalDateTime time = log.getTime();
         final LocalDate logDate = time.toLocalDate();
         if (output == null) {
@@ -73,6 +74,30 @@ public class FileHandler implements LogHandler {
             output = new PrintStream(Files.newOutputStream(logFile.toPath(), StandardOpenOption.WRITE ,StandardOpenOption.APPEND, StandardOpenOption.CREATE), true);
             lastRecordDate = logDate;
         }
+        return output;
+    }
+
+    public String getLogDir() {
+        return logDir;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public File getLogFile() {
+        return logFile;
+    }
+
+    public int getMaxFiles() {
+        return maxFiles;
+    }
+
+    public LocalDate getLastRecordDate() {
+        return lastRecordDate;
+    }
+
+    public PrintStream getOutput() {
         return output;
     }
 }

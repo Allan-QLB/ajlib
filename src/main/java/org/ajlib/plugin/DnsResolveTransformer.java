@@ -1,7 +1,7 @@
 package org.ajlib.plugin;
 
 import org.ajlib.NamedClassTransformer;
-import org.ajlib.log.LogHelper;
+import org.ajlib.log.LoggerFactory;
 import org.ajlib.log.Logger;
 import org.ajlib.rule.DnsFilter;
 import org.ajlib.util.ConfigUtil;
@@ -15,7 +15,7 @@ import java.security.ProtectionDomain;
 
 public class DnsResolveTransformer implements NamedClassTransformer {
 
-    private static final Logger LOG = LogHelper.getLogger(DnsResolveTransformer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DnsResolveTransformer.class);
 
     @Override
     public void initialize(String config) {

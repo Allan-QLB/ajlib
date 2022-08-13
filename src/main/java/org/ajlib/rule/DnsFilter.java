@@ -1,13 +1,13 @@
 package org.ajlib.rule;
 
-import org.ajlib.log.LogHelper;
+import org.ajlib.log.LoggerFactory;
 import org.ajlib.log.Logger;
 
 import java.net.UnknownHostException;
 import java.util.List;
 
 public class DnsFilter {
-    private static final Logger LOGGER = LogHelper.getLogger(DnsFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DnsFilter.class);
     private static List<Rule> rules;
 
     public static void initialize(List<Rule> rules) {

@@ -2,9 +2,11 @@ package org.ajlib;
 
 import cn.hutool.core.util.ClassUtil;
 import lombok.SneakyThrows;
+import org.ajlib.log.ConsoleLog;
 import org.ajlib.util.ConfigUtil;
 import org.ajlib.util.YamlUtil;
 
+import java.io.Console;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.util.Map;
@@ -13,24 +15,21 @@ import java.util.Set;
 import java.util.jar.JarFile;
 
 public class Agent {
-
     public static final String HOME = "agent.home";
-
     public static void premain(String args, Instrumentation inst) {
-
         try {
             final Map<String, Object> config = ConfigUtil.loadConfigAsMap();
             loadPlugins(inst, config);
             loadClassPathPlugins(inst, config);
-        } catch (Exception e) {
-            System.err.println("Error run agent");
+        } catch (Throwable t) {
+            ConsoleLog.error("Error run agent", t);
         }
     }
 
     private static void loadClassPathPlugins(Instrumentation inst, Map<String, Object> config) {
         final ServiceLoader<Plugin> plugins = ServiceLoader.load(Plugin.class);
         for (Plugin plugin : plugins) {
-            System.out.println("Load classpath plugin " + plugin);
+            ConsoleLog.info("Load classpath plugin {}", plugin);
             plugin.initialize(YamlUtil.dump(plugin.name(), config));
             plugin.transformers().forEach(inst::addTransformer);
         }
@@ -47,9 +46,9 @@ public class Agent {
         for (Class<?> clazz : classes) {
             if (!ClassUtil.isAbstract(clazz) && ClassUtil.isAssignable(Plugin.class, clazz)) {
                 final Plugin plugin = (Plugin) clazz.newInstance();
-                System.out.println("Load plugin " + plugin);
                 plugin.initialize(YamlUtil.dump(plugin.name(), config));
                 compositeTransformer.addTransformers(plugin.transformers());
+                ConsoleLog.info("Loaded plugin {}", plugin);
             }
         }
         inst.addTransformer(compositeTransformer, true);

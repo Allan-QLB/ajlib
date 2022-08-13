@@ -6,7 +6,6 @@ import java.security.ProtectionDomain;
 import java.util.regex.Pattern;
 
 public interface NamedClassTransformer extends ClassFileTransformer {
-
     void initialize(String config);
 
     String targetPattern();
@@ -30,7 +29,6 @@ public interface NamedClassTransformer extends ClassFileTransformer {
                      ProtectionDomain protectionDomain,
                      byte[] classfileBuffer) throws IllegalClassFormatException {
         if (shouldTransform(className)) {
-            System.out.println("transform class " + className);
             return doTransform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
         }
         return classfileBuffer;

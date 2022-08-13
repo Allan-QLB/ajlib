@@ -51,5 +51,4 @@ public class LoggerImpl implements Logger {
             handler.handleLog(log);
         }
     }
-
 }

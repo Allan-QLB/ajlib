@@ -10,7 +10,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DnsFilterTest {
-
     @Test
     void filter() {
         List<Rule> rules = Arrays.asList(new Rule(new HashMap<String, Object>() {
