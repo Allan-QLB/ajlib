@@ -8,8 +8,4 @@ public class StringUtil {
     public static String empty() {
         return "";
     }
-
-    public static String newLine() {
-        return "\r\n";
-    }
 }

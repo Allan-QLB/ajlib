@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class LogRecord {
-    private final Logger.Level level;
+    private final Level level;
     private final String logName;
     private final String message;
     private final Object[] arguments;
     private final LocalDateTime time;
 
-    public LogRecord(Logger.Level level, String name, String message, Object... arguments) {
+    public LogRecord(Level level, String name, String message, Object... arguments) {
         this.level = level;
         this.logName = name;
         this.message = message;
@@ -18,7 +18,7 @@ public class LogRecord {
         this.time = LocalDateTime.now();
     }
 
-    public Logger.Level getLevel() {
+    public Level getLevel() {
         return level;
     }
 

@@ -14,7 +14,7 @@ public class ConsoleHandler implements LogHandler {
     private static final AnsiColor COLOR_CLASSNAME = AnsiColor.CYAN;
     private static final AnsiColor COLOR_NONE = AnsiColor.DEFAULT;
 
-    private static final Function<Logger.Level, AnsiColor> COLOR_FACTORY = (level -> {
+    private static final Function<Level, AnsiColor> COLOR_FACTORY = (level -> {
         switch (level) {
             case DEBUG:
                 return AnsiColor.BRIGHT_GREEN;
@@ -28,11 +28,6 @@ public class ConsoleHandler implements LogHandler {
                 return COLOR_NONE;
         }
     });
-
-    @Override
-    public void handleLog(@Nonnull LogRecord log) {
-        getOutput(log).print(buildLogText(log));
-    }
 
     @Override
     public String buildLogText(@Nonnull LogRecord logRecord) {
@@ -51,10 +46,6 @@ public class ConsoleHandler implements LogHandler {
 
     @Override
     public PrintStream getOutput(@Nonnull LogRecord log) {
-        if (log.getLevel() == Logger.Level.ERROR) {
-            return System.err;
-        } else {
-            return System.out;
-        }
+        return System.out;
     }
 }

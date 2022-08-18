@@ -11,19 +11,19 @@ public class Rule {
 
     @Nonnull
     private final Matching matching;
-    private Object rule;
+    protected Object rule;
 
     public Rule(@Nonnull Map<String, Object> ruleContent) {
         matching = parseMatching(ruleContent);
-        parseRule(ruleContent);
+        rule = parseRule(ruleContent);
     }
 
-    protected void parseRule(Map<String, Object> ruleContent) {
+    protected Object parseRule(Map<String, Object> ruleContent) {
         Object r = ruleContent.get(KEY_RULE);
         if (r == null) {
             throw new RuleException("Empty rule found");
         }
-        rule = r;
+        return r;
     }
 
     @Nonnull
@@ -38,6 +38,10 @@ public class Rule {
 
     public boolean test(Object value) {
         return matching.matches(value, rule);
+    }
+
+    public Object getRule() {
+        return rule;
     }
 
     @Override

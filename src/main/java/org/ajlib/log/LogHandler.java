@@ -2,8 +2,6 @@ package org.ajlib.log;
 
 import org.ajlib.exception.LogException;
 import org.ajlib.util.StringUtil;
-import org.slf4j.helpers.FormattingTuple;
-import org.slf4j.helpers.MessageFormatter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,8 +15,8 @@ public interface LogHandler {
     PrintStream getOutput(@Nonnull LogRecord log) throws IOException;
     default void handleLog(@Nonnull LogRecord log) {
         try {
-            getOutput(log).println(buildLogText(log));
-        } catch (IOException e) {
+            getOutput(log).print(buildLogText(log));
+        } catch (Throwable e) {
             throw new LogException("HandleLog failed " + log, e);
         }
     }

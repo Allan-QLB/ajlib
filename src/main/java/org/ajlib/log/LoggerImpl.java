@@ -2,16 +2,14 @@ package org.ajlib.log;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import static org.ajlib.log.Level.*;
 
-import static org.ajlib.log.Logger.Level.*;
 
 public class LoggerImpl implements Logger {
 
     private final String name;
 
     private final List<LogHandler> handlers;
-
-    private boolean debugEnable;
 
     public LoggerImpl(@Nonnull String name, List<LogHandler> handlers) {
         this.name = name;

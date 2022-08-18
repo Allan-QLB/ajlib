@@ -22,7 +22,7 @@ public class FileHandler implements LogHandler {
     private static final String DEFAULT_LOG_NAME = "agent.log";
     private static final String KEY_MAX_FILES = "max-file";
     private static final int DEFAULT_MAX_FILES = 1;
-    private static final String LOG_FORMAT = "[%s][%-5s]%s%-30s: %s%n";
+    private static final String LOG_FORMAT = "[%s][%s]%s%-30s: %s%n";
     private final String logDir;
     private final String name;
     private final File logFile;
@@ -36,16 +36,6 @@ public class FileHandler implements LogHandler {
         name = (String) config.getOrDefault(KEY_LOG_NAME, DEFAULT_LOG_NAME);
         maxFiles = (int) config.getOrDefault(KEY_MAX_FILES, DEFAULT_MAX_FILES);
         logFile = new File(logDir, name);
-    }
-
-
-    @Override
-    public void handleLog(@Nonnull LogRecord log) {
-        try {
-            getOutput(log).println(buildLogText(log));
-        } catch (IOException | Error e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

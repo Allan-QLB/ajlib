@@ -7,11 +7,6 @@ public interface Logger {
     void warn(String message, Object... args);
     void error(String message, Object... args);
 
-    enum Level {
-        DEBUG,
-        INFO,
-        WARN,
-        ERROR
-    }
+
 
 }

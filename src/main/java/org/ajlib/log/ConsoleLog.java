@@ -3,6 +3,8 @@ package org.ajlib.log;
 import java.util.Collections;
 
 public class ConsoleLog {
+
+    private ConsoleLog() {}
     private static final Logger console = new LoggerImpl("default", Collections.singletonList(new ConsoleHandler()));
 
     public static boolean isDebugEnabled() {
